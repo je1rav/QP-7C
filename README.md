@@ -39,7 +39,7 @@ Si5351モジュール，トランス，LPF用に8ピンICソケットを付け�
 LPFもChocolate基板（1x1）上に作製できます（図を参照）．  
 Chocolate基板のカットは，カッターナイフで切り込みを入れてから手で割れば可能です．  
 銅箔側に部品を置いた方が，8ピンICソケットの半田付けが楽です．  
-最も単純なArduino Nano用スケッチ(QP-7C_simple.ico)は以下の通り．  
+最も単純なArduino Nano用スケッチは，”QP-7C_simple.ico”です．  
   
 必要追加部品(2021年10月1日時点の価格)  
 Chocolate基板：CRkits共同購入プロジェクト(http://jl1kra.sakura.ne.jp/chocolate.html)380円  
