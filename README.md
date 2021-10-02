@@ -42,15 +42,15 @@ Chocolate基板のカットは，カッターナイフで切り込みを入れ�
 最も単純なArduino Nano用スケッチは，”QP-7C_simple.ico”です．  
   
 必要追加部品(2021年10月1日時点の価格)  
-Chocolate基板：CRkits共同購入プロジェクト(http://jl1kra.sakura.ne.jp/chocolate.html)　380円  
+Chocolate基板：CRkits共同購入プロジェクト，　380円　http://jl1kra.sakura.ne.jp/chocolate.html　　
 Arduino Nano互換機：500円から1,000円程度，オリジナルは高価  
-秋月電子Si5351モジュール：秋月電子(https://akizukidenshi.com/catalog/g/gK-10679/)　500円  
-8Pソケット（Si5351モジュール受け、DIY7、DIY7受け、LPFソケット受け）：秋月電子(https://akizukidenshi.com/catalog/g/gP-00035/)　15円x4  
-8P連結ソケット（両端オスピン）（LPFソケット用）：秋月電子(https://akizukidenshi.com/catalog/g/gP-00264/)　55円  
-ブレッドボード用ＤＣジャックＤＩＰ化キット：秋月電子(https://akizukidenshi.com/catalog/g/gK-05148/)　100円  
-基板取付用３．５ｍｍステレオミニジャック：秋月電子(https://akizukidenshi.com/catalog/g/gC-12478/)　50円  
-分割ロングピンソケット　１×４２（Arduino Nano受け）：秋月電子(https://akizukidenshi.com/catalog/g/gC-05779/)　80円  
-ピンヘッダ　１×４０（電源？）：秋月電子(https://akizukidenshi.com/catalog/g/gC-00167/)　35円  
+秋月電子Si5351モジュール：秋月電子，　500円　https://akizukidenshi.com/catalog/g/gK-10679/ 
+8Pソケット（Si5351モジュール受け、DIY7、DIY7受け、LPFソケット受け）：秋月電子，15円x4　https://akizukidenshi.com/catalog/g/gP-00035/
+8P連結ソケット（両端オスピン）（LPFソケット用）：秋月電子，55円　https://akizukidenshi.com/catalog/g/gP-00264/　　
+ブレッドボード用ＤＣジャックＤＩＰ化キット：秋月電子，　100円　https://akizukidenshi.com/catalog/g/gK-05148/  
+基板取付用３．５ｍｍステレオミニジャック：秋月電子，　50円　https://akizukidenshi.com/catalog/g/gC-12478/　  
+分割ロングピンソケット　１×４２（Arduino Nano受け）：秋月電子，　80円　https://akizukidenshi.com/catalog/g/gC-05779/  
+ピンヘッダ　１×４０（電源？）：秋月電子，　35円　https://akizukidenshi.com/catalog/g/gC-00167/  
 電解コンデンサ 16V, 100μF（電源用）：2個  
 積層コンデンサ10μF(Si5351電源用）：1個  
 積層コンデンサー1 uF(Nano電源用）：1個  
