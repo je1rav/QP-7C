@@ -18,6 +18,7 @@
 	他バンドはまだ試していません．  
 
 具体的には，図のようにChocolate基板（3x2）上に作製しました．  
+https://user-images.githubusercontent.com/91771666/135711756-50a45c5a-99ca-4c20-a58f-e6cac883cdb4.png  
 Arduino Nano互換機のアナログ端子側(図の下側，+3.3V, +5V, Vin端子のある側)には，Chocolate基板上にピンソケットを付けて，Arduino Nano互換機と接続します．  
 ただし，RSTピンはピンソケットを曲げるか切るかして接続しません（そのまま繋ぐとグランドに接続されてしまうので）．  
 デジタル端子側(図の上側, D0-D12がある側)はChocolate基板にはピンソケットを付けず，Arduino Nano互換機のピンは空中に浮かしておきます．  
