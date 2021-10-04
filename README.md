@@ -46,7 +46,7 @@ Chocolate基板のカットは，カッターナイフで切り込みを入れ�
 銅箔側に部品を置かないと、8ピン連結ソケットの半田付けが困難です．  
 （両面ユニバーサル基板なら何の心配もありません．）
 #### 最も単純なArduino Nano用スケッチは，”QP-7C_simple.ico”です．  
-  
+	"Etherkit SI5351"ライブラリーを使用しました．
 #### 必要追加部品(2021年10月1日時点の価格)  
 	Chocolate基板：CRkits共同購入プロジェクト，380円　http://jl1kra.sakura.ne.jp/chocolate.html  
 	Arduino Nano互換機：500円から1,000円程度，オリジナルは高価  
