@@ -6,8 +6,8 @@ long int freq = 7010000;; // freqency in Hz
 void setup(void)
 {
   //si5351の準備 ここから  
-  int32_t　cal_factor = 0;
-  si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0); 
+  int32_t cal_factor = 32392;
+  si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, cal_factor); 
   si5351.set_correction(cal_factor, SI5351_PLL_INPUT_XO);
  
   si5351.set_pll(SI5351_PLL_FIXED, SI5351_PLLA);
