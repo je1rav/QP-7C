@@ -1,7 +1,7 @@
 #include "si5351.h"
 
 Si5351 si5351;
-long int freq = 7010000;; // freqency in Hz
+long int freq = 7010000; // freqency in Hz
    
 void setup(void)
 {
