@@ -14,7 +14,7 @@
 		他のバンド用には、例えばFCZコイル（サトー電気）+共振コンデンサーで大丈夫でしょうか．  
 	LPF：8ピン連結ソケットの上に基板を乗せ，その上にLPFを構成しました． 受け側も8ピンICソケットにしました．  
 		80m帯、30m帯、20mバンド用のLPFにはCRK-10AやD4Dの回路図などを参考にしてLPFソケット上に作成可能と思われます．  
-結合トランスにFCZコイル（9MHz用,サトー電気）+共振コンデンサー(62pF)を用い，CRK-10Aの10MHz帯用のLPFの回路で実験中です．  
+結合トランスにFCZコイル（9MHz用,サトー電気）+共振コンデンサー(62pF)を用い，CRK-10Aの10MHzモデルのLPFの回路で実験中です．  
 
 具体的には，図のようにChocolate基板（3x2）上に作製しました．  
 ![alt text](images/QP-7C_1.png)  
@@ -60,7 +60,7 @@ Chocolate基板の中途半端なカットは，カッターナイフで切り�
 	ブレッドボード用ＤＣジャックＤＩＰ化キット：秋月電子，100円　https://akizukidenshi.com/catalog/g/gK-05148/  
 	基板取付用３．５ｍｍステレオミニジャック：秋月電子，50円　https://akizukidenshi.com/catalog/g/gC-12478/  
 	分割ロングピンソケット　１×４２（Arduino Nano受け）：秋月電子，80円　https://akizukidenshi.com/catalog/g/gC-05779/  
-	ピンヘッダ　１×４０（電源？）：秋月電子，35円　https://akizukidenshi.com/catalog/g/gC-00167/  
+	ピンヘッダ　１×４０（必要に応じて）：秋月電子，35円　https://akizukidenshi.com/catalog/g/gC-00167/  
 	電解コンデンサ 16V, 100μF（電源用）：2個  
 	積層コンデンサ10μF(Si5351電源用）：1個  
 	積層コンデンサー1 uF(Nano電源用）：1個  
