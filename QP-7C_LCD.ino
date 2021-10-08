@@ -45,8 +45,8 @@ void loop(void)
     cursol++;
     freqstep = freqstep / 10;
     if (cursol>8) {   //端まできたらもどす
-      cursol=2; // 最大step幅 1MHz (10MHzにしたければ2を1に)
-      freqstep = 1000000; // 最大step幅 (cursolに)合わせて変更戻る
+      cursol=2; // 左からのcursol位置、最大step幅1MHzに対応 (10MHzにしたければ2を1に)
+      freqstep = 1000000; // 最大step幅 (cursolの値に合わせて変更)
     }
   }
   
@@ -59,8 +59,8 @@ void loop(void)
   
   // 周波数ダウン
   if (digitalRead(10)==LOW){
-    freqset = freq - freqstep; // オフバンド防止関数へ
-    freq=freq_in_band(freq, freqset);
+    freqset = freq - freqstep;
+    freq=freq_in_band(freq, freqset); // オフバンド防止関数へ
     si5351.set_freq(freq*100ULL, SI5351_CLK0);
   }
   lcd_disp(freq, cursol);
@@ -69,27 +69,16 @@ void loop(void)
 //LCDでの周波数表示用の関数、変化させる周波数の桁を点滅
 void lcd_disp(long int frequency, int cursolposition)
 {
+  lcd.setCursor(1,0);
+  lcd.print("        ");
+  
   String freqString =  String(frequency, DEC);
-  switch (freqString.length()) {
-  case 7:
-    freqString = " " + freqString;
-    break;
-  case 6:
-    freqString = "  " + freqString;
-    break;
-  case 5:
-    freqString = "   " + freqString;
-    break;
-  }
-  String freqString1 = freqString.substring(0,cursolposition-1);
-  String freqString2 = freqString.substring(cursolposition);
-  String blinkString = freqString1 + "_" + freqString2;
-  lcd.setCursor(1,0);
-  lcd.print(blinkString);
-  delay(40);  
-  lcd.setCursor(1,0);
+  lcd.setCursor(1,8-freqString.length());
   lcd.print(freqString);
-  delay(100);  
+  delay(100);
+  lcd.setCursor(1,cursolposition-1);
+  lcd.print("_");
+  delay(40);
 }
 
 //送信周波数がオフバンドしないように強制的に周波数を制限する関数
