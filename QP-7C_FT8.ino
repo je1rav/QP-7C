@@ -55,7 +55,7 @@ void setup(void)
 
   //Mode check -----  
   key=digitalRead(2);
-  if (key==0) {
+  if (key==1) {
     mode = 0; //CW mode (single key)
     freq=7010000;
     lcd.setCursor(0,0);
