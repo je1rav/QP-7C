@@ -422,77 +422,77 @@ long int freq_in_band(long int frequency, long int freqset)
     freq_in_band=135700;
     return freq_in_band;
   }
-  else if (freqset > 135800 & freqset < 472000) {
+  else if (freqset > 135800 && freqset < 472000) {
     if (freqset>frequency) freq_in_band=472000;
     else freq_in_band=135800;
     return freq_in_band;
   }
-  else if (freqset > 479000 & freqset < 1800000) {
+  else if (freqset > 479000 && freqset < 1800000) {
     if (freqset>frequency) freq_in_band=1800000;
     else freq_in_band=479000;
     return freq_in_band;
   }
-  else if (freqset > 1875000 & freqset < 1907500) {
+  else if (freqset > 1875000 && freqset < 1907500) {
     if (freqset>frequency) freq_in_band=1907500;
     else freq_in_band=1875000;
     return freq_in_band;
   }
-  else if (freqset > 1912500 & freqset < 3500000) {
+  else if (freqset > 1912500 && freqset < 3500000) {
     if (freqset>frequency) freq_in_band=3500000;
     else freq_in_band=1912500;
     return freq_in_band;
   }
-  else if (freqset > 3580000 & freqset < 3662000) {
+  else if (freqset > 3580000 && freqset < 3662000) {
     if (freqset>frequency) freq_in_band=3662000;
     else freq_in_band=3580000;
     return freq_in_band;
   }
-  else if (freqset > 3687000 & freqset < 3716000) {
+  else if (freqset > 3687000 && freqset < 3716000) {
     if (freqset>frequency) freq_in_band=3716000;
     else freq_in_band=3687000;
     return freq_in_band;
   }
-  else if (freqset > 3770000 & freqset < 3791000) {
+  else if (freqset > 3770000 && freqset < 3791000) {
     if (freqset>frequency) freq_in_band=3791000;
     else freq_in_band=3770000;
     return freq_in_band;
   }
-  else if (freqset > 3805000 & freqset < 7000000) {
+  else if (freqset > 3805000 && freqset < 7000000) {
     if (freqset>frequency) freq_in_band=7000000;
     else freq_in_band=3805000;
     return freq_in_band;
   }
-  else if (freqset > 7200000 & freqset < 10100000) {
+  else if (freqset > 7200000 && freqset < 10100000) {
     if (freqset>frequency) freq_in_band=10100000;
     else freq_in_band=7200000;
     return freq_in_band;
   }
-  else if (freqset > 10150000 & freqset < 14000000) {
+  else if (freqset > 10150000 && freqset < 14000000) {
     if (freqset>frequency) freq_in_band=14000000;
     else freq_in_band=10150000;
     return freq_in_band;
   }
-  else if (freqset > 14350000 & freqset < 18068000) {
+  else if (freqset > 14350000 && freqset < 18068000) {
     if (freqset>frequency) freq_in_band=18068000;
     else freq_in_band=14350000;
     return freq_in_band;
   }
-  else if (freqset > 18168000 & freqset < 21000000) {
+  else if (freqset > 18168000 && freqset < 21000000) {
     if (freqset>frequency) freq_in_band=21000000;
     else freq_in_band=18168000;
     return freq_in_band;
   }
-  else if (freqset > 21450000 & freqset < 24890000) {
+  else if (freqset > 21450000 && freqset < 24890000) {
     if (freqset>frequency) freq_in_band=24890000;
     else freq_in_band=21450000;
     return freq_in_band;
   }
-  else if (freqset > 24990000 & freqset < 28000000) {
+  else if (freqset > 24990000 && freqset < 28000000) {
     if (freqset>frequency) freq_in_band=28000000;
     else freq_in_band=24990000;
     return freq_in_band;
   }
-  else if (freqset > 29700000 & freqset < 50000000) {
+  else if (freqset > 29700000 && freqset < 50000000) {
     if (freqset>frequency) freq_in_band=50000000;
     else freq_in_band=29700000;
     return freq_in_band;
@@ -513,49 +513,49 @@ int freqcheck(long int frequency)  // retern 1=out-of-band, 0=in-band
   if (frequency < 135700) {
     return 1;
   }
-  else if (frequency > 135800 & frequency < 472000) {
+  else if (frequency > 135800 && frequency < 472000) {
     return 1;
   }
-  else if (frequency > 479000 & frequency < 1800000) {
+  else if (frequency > 479000 && frequency < 1800000) {
     return 1;
   }
-  else if (frequency > 1875000 & frequency < 1907500) {
+  else if (frequency > 1875000 && frequency < 1907500) {
     return 1;
   }
-  else if (frequency > 1912500 & frequency < 3500000) {
+  else if (frequency > 1912500 && frequency < 3500000) {
     return 1;
   }
-  else if (frequency > 3580000 & frequency < 3662000) {
+  else if (frequency > 3580000 && frequency < 3662000) {
     return 1;
   }
-  else if (frequency > 3687000 & frequency < 3716000) {
+  else if (frequency > 3687000 && frequency < 3716000) {
     return 1;
   }
-  else if (frequency > 3770000 & frequency < 3791000) {
+  else if (frequency > 3770000 && frequency < 3791000) {
     return 1;
   }
-  else if (frequency > 3805000 & frequency < 7000000) {
+  else if (frequency > 3805000 && frequency < 7000000) {
     return 1;
   }
-  else if (frequency > 7200000 & frequency < 10100000) {
+  else if (frequency > 7200000 && frequency < 10100000) {
     return 1;
   }
-  else if (frequency > 10150000 & frequency < 14000000) {
+  else if (frequency > 10150000 && frequency < 14000000) {
     return 1;
   }
-  else if (frequency > 14350000 & frequency < 18068000) {
+  else if (frequency > 14350000 && frequency < 18068000) {
     return 1;
   }
-  else if (frequency > 18168000 & frequency < 21000000) {
+  else if (frequency > 18168000 && frequency < 21000000) {
     return 1;
   }
-  else if (frequency > 21450000 & frequency < 24890000) {
+  else if (frequency > 21450000 && frequency < 24890000) {
     return 1;
   }
-  else if (frequency > 24990000 & frequency < 28000000) {
+  else if (frequency > 24990000 && frequency < 28000000) {
     return 1;
   }
-  else if (frequency > 29700000 & frequency < 50000000) {
+  else if (frequency > 29700000 && frequency < 50000000) {
     return 1;
   }
   else if (frequency > 54000000) {
