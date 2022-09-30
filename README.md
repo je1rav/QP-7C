@@ -422,7 +422,7 @@ PA TrのBD139を高周波用のTrに変えると， 高周波バンドでの出�
 	
 この基板のままでは，送受切り替え用MOS-FET(BS170)が受信時にうまく作動せず，受信できない場合があるようです．  
 その場合は， Q3のドレインと12V電源ラインを10kΩの抵抗で接続するとうまくいくようです．  
-（新QRP Plaza；　投稿番号[6477]より　(https://bbs7.sekkaku.net/bbs/qrp/　）
+（新QRP Plaza；投稿番号[6477]より　(https://bbs7.sekkaku.net/bbs/qrp/）
 ![alt text](images/QP-7C_TRX_6.png)   
 
 この10kΩ抵抗を追加した修正回路およびそれを組み込んだ基板のKicadのファイルは"QP-7C_TRX-PCB_1.1_kicad.zip"です．  
