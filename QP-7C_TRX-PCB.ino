@@ -362,7 +362,15 @@ void digital(void)
     }
   }
 
-  si5351.output_enable(SI5351_CLK0, 0);   //TX osc. off
+  if (FSKtx == 1){
+    si5351.output_enable(SI5351_CLK0, 0);   //TX osc. off
+    si5351.set_freq(freq*100ULL, SI5351_CLK1);
+    delay(10);
+    digitalWrite(13,0);  //TX off
+    digitalWrite(12,1);  //RX on
+    si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
+    FSKtx = 0;
+  }
   
   // change the frequency by rotary encoder
   #ifdef IhaveOLED&RotaryEncorder
@@ -372,13 +380,7 @@ void digital(void)
   #ifdef IuseCatControll
     if(Serial.available() > 0) cat();
   #endif 
-  
-  si5351.set_freq(freq*100ULL, SI5351_CLK1);
-  delay(10);
-  digitalWrite(13,0);  //TX off
-  digitalWrite(12,1);  //RX on
-  si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
-  FSKtx = 0;
+
 }
 
 #ifdef IhaveOLED&RotaryEncorder
