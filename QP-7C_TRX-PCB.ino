@@ -454,8 +454,7 @@ void digitalfreqchange(void)
           freqset = freq + freqstep;
           if (freqset <= 54000000) freq = freqset;
           si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
-          if (freq < 10000000) cw_tone = -CW_TONE;
-          else cw_tone = CW_TONE;
+          cw_tone = 0;
           si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1); //RX   
           oled_disp();
         }
@@ -463,8 +462,7 @@ void digitalfreqchange(void)
           freqset = freq - freqstep;
           if (freqset >= 1000000) freq = freqset;
           si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
-          if (freq < 10000000) cw_tone = -CW_TONE;
-          else cw_tone = CW_TONE;
+          cw_tone = 0;
           si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1); //RX   
           oled_disp();
         }
@@ -614,7 +612,14 @@ void cat(void) {
   if (command == "FA") {          
     if (parameter != "")  
     {  
-      freq = parameter.toInt();             
+      long int freqset = parameter.toInt();             
+      if (freqset >= 1000000 && freqset <= 54000000) freq = freqset;
+      si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
+      if (mode == 2) cw_tone = 0;
+      else if (freq < 10000000) cw_tone = -CW_TONE;
+      else cw_tone = CW_TONE;
+      si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1); //RX   
+      
       #ifdef IhaveOLED&RotaryEncorder  //added
       oled_disp();  //added
       #endif  //added             
