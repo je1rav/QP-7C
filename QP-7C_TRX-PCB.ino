@@ -7,6 +7,9 @@
 // =====MakerNanoBuzzer for CW tone (D8 pin)========
 //#define IuseMakerNanoBuzzer
 // =================================================
+// Decentralize Beats to white-like noise in CW mode
+#define IuseBeatDecentralization
+// =================================================
 
 //#define FREQ_CW   3560000 // in Hz
 #define FREQ_CW   7003000 // in Hz
@@ -178,6 +181,9 @@ void cw0(void) //Single key mode (CW)
   #ifdef IuseCatControll
     if(Serial.available() > 0) cat();
   #endif  
+  #ifdef IuseBeatDecentralization
+    delayMicroseconds(random(100)); //Apply a random delay of 0-100uS to decentralize digitalRead() beats to white-like noise.
+  #endif
 }
 
 void cw1(void) //Paddle mode (CW)
@@ -217,6 +223,9 @@ void cw1(void) //Paddle mode (CW)
       if(Serial.available() > 0) cat();
     #endif  
   }
+  #ifdef IuseBeatDecentralization
+    delayMicroseconds(random(100)); //Apply a random delay of 0-100uS to decentralize digitalRead() beats to white-like noise.
+  #endif
 }
 
 void cw_tx(void){
