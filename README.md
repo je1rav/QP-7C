@@ -445,4 +445,5 @@ PA TrのBD139を高周波用のTrに変えると， 高周波バンドでの出�
 BS170のゲート-GND間に1uFのコンデンサーを挿入すると改善されます．  
 ![alt text](images/QP-7C_TRX_7.png)  
 QCXでは，0.1uFのコンデンサが付けられているのですが，これを省略したのが失敗でした．  
-このコンデンサを追加した修正回路およびそれを組み込んだ基板のKicadのファイルは"QP-7C_TRX-PCB_1.2_kicad.zip"です．   
+このコンデンサーを追加した修正回路およびそれを組み込んだ基板のKicadのファイルは"QP-7C_TRX-PCB_1.2_kicad.zip"です．   
+コンデンサーをつければアップデート"QP-7C_TRX-PCB.ino"の#define IuseBeatDecentralizationはコメントアウトして大丈夫です．   
