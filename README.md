@@ -515,7 +515,7 @@ QRP LabsのQCXやuSDX(QCX-SSB)は，スイッチング方式のIQミキサーを
 	BFO周波数（BFO_LSB, BFO_USB）は，使用するIFフィルターの特性に合わせて調整する必要がありますので，次項目をご参照ください．　
 	CW受信は7MHz帯以下はLSB,10MHz帯以上はUSB受信です．　
 
-#### BFO周波数（BFO_LSB, BFO-USB）の調整．  
+#### BFO周波数（BFO_LSB, BFO-USB）の調整  
 	BFO周波数の調整の前に，”Si5351_CAL”の値の調整を行ないます．　
 	秋月電子のSi5351モジュールの発振確度は+-10ppmと書かれていますので，そのままでは，10MHzで+-100Hz程度の誤差があります．　
 	この程度の誤差なので，少しずれているかもしれないと思いながら無視して使用することも可能でしょうが，調整をお勧めします．　
@@ -599,7 +599,7 @@ QRP LabsのQCXやuSDX(QCX-SSB)は，スイッチング方式のIQミキサーを
 ![alt text](images/QP-7C_TRX2_5.png)　  
 
 	
-#### Kicadのファイルは"QP-7C_TRX2_kicad.zip"で，部品毎に基板を分けたKicadの基板ファイルは"QP-7C_TRX2_parts_kicad.zip"です．  
+#### Kicadのファイルは"QP-7C_TRX2.kicad.zip"で，部品毎に基板を分けたKicadの基板ファイルは"QP-7C_TRX2_parts_kicad.zip"です．  
 	ELECROW用のガーバーファイルは"QP-7C_TRX2_ELECROW.zip"です．最近ELECROW社の審査が厳しくなってきているようで，単一デザイン基板と見なされない可能性もあります(5枚で1＄で無くなる)．  
 	JLCPCB用のガーバーファイルは"QP-7C_TRX2_JLCPCB.zip"で，JLCPCBの場合は”Different Design”の項目で4を選択する必要があると思います(5枚で$20ぐらい)．  
 	基板サイズやコネクタ類の位置は「QP-7Cミニ送信機の改造（その4）」と同じです． 
