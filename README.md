@@ -460,9 +460,9 @@ CD2003GP(TA2003P互換)は，もともとスーパーヘテロダイン方式用
 DBM-ICを使ったダイレクトコンバージョン方式では混変調による放送波の通り抜け混信が指摘されており，この問題を改善できるかもしれません．　　  
 
 CD2003GP(TA2003P)をスーパーヘテロダイン方式で使用した短波ラジオは，JA9TTTさんのBlogに詳細な解説があります．　　  
-https://ja9ttt.blogspot.com/2013/03/radio-chip-ta2003p-part-1.html　　  
-https://ja9ttt.blogspot.com/2013/05/radio-chip-ta2003p-part-2.html　　  
-https://ja9ttt.blogspot.com/2018/07/short-wave-radio-design-2.html　　  
+https://ja9ttt.blogspot.com/2013/03/radio-chip-ta2003p-part-1.html  
+https://ja9ttt.blogspot.com/2013/05/radio-chip-ta2003p-part-2.html  
+https://ja9ttt.blogspot.com/2018/07/short-wave-radio-design-2.html  
 これらを真似して，CD2003GP(TA2003P互換)を使用した受信機を作り，QP-7Cと合わせたトランシーバーにしました．　　  
 ICチップ１つですが，受信感度はSimple Mini Receiverキットを使ったQP-7Cミニ送信機の改造（その4）よりも良いようです．　　  
 
