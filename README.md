@@ -607,7 +607,7 @@ QRP LabsのQCXやuSDX(QCX-SSB)は，スイッチング方式のIQミキサーを
 	
 #### 必要部品(2022年11月1日時点の価格)  
 	QP-7Cキット：CRkits共同購入プロジェクト，1820円 + 180円（送料）　http://jl1kra.sakura.ne.jp/QP-7C.html  
-	CD2003GP：たとえばaitendo，150円　https://www.aitendo.com/product/1528　(aitendoは現在，在庫切れのようです．AliExpressでの購入でしょうか?)
+	CD2003GP：たとえばaitendo，150円　https://www.aitendo.com/product/1528/
 	LTM455IW or LTM450IW：2個　秋月電子，1個110円(LTM455IW) or 10個300円(LTM450IW) https://akizukidenshi.com/catalog/g/gP-16374/ or https://akizukidenshi.com/catalog/g/gP-16052/
 	Arduino Nano互換機：たとえば秋月電子Maker Nano 840円　https://akizukidenshi.com/catalog/g/gM-16282/   
 	秋月電子Si5351モジュール：秋月電子，500円　https://akizukidenshi.com/catalog/g/gK-10679/  
