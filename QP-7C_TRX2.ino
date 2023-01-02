@@ -117,6 +117,7 @@ void setup(void)
   delay(100);
   if (digitalRead(11)==0){
       mode = 2; //Digital(FSK) mode
+      freq=FREQ_DIGI;        
       digital_prep();
   }
   else {
@@ -126,21 +127,25 @@ void setup(void)
     switch (key1+key2){
     case 1:
       mode = 0; //Single key mode (CW)
+      freq=FREQ_CW;
       cw_prep();
       break;
     case 2:
       mode = 0; //Single key mode (CW)
+      freq=FREQ_CW;
       cw_prep();
       break;
     case 3:
       mode = 1; //Paddle mode (CW)
+      freq=FREQ_CW;
       cw_prep();
       pinMode(4, OUTPUT);
       digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
       break;
     default:
       mode = 2; //Digital(FSK) mode
-      cw_tone=0;
+      freq=FREQ_DIGI;        
+      digital_prep();
     }
   }
   
@@ -157,7 +162,6 @@ void setup(void)
 }
 
 void cw_prep(void){
-  freq=FREQ_CW;
   if (freq < 10000000) {
     cw_tone = -CW_TONE;
     if (local = 1) bfofreq = BFO_LSB;
@@ -171,7 +175,6 @@ void cw_prep(void){
 }
 
 void digital_prep(void){
-  freq=FREQ_DIGI;        
   cw_tone=0;
   if (local = 1) bfofreq = BFO_USB;
   else bfofreq = BFO_LSB;
@@ -698,6 +701,26 @@ void cat(void) {
     sent = "FA" // Return 11 digit frequency in Hz.  
     + String("00000000000").substring(0,11-(String(freq).length()))   
     + String(freq) + ";";     
+  }
+  else if (command == "IF") {          
+    if (mode == 2) {
+      sent = "IF" // Return 11 digit frequency in Hz.  
+      + String("00000000000").substring(0,11-(String(freq).length()))   
+      + String(freq) + "0001-00000" + "0000006" + "0000000;";     
+    }
+    else {
+      sent = "IF" // Return 11 digit frequency in Hz.  
+      + String("00000000000").substring(0,11-(String(freq).length()))   
+      + String(freq) + "0001-00000" + "0000003" + "0000000;";     
+    }
+  }
+  else if (command == "MD") {          
+    if (parameter = "6") {
+      mode = 2;
+      digital_prep();
+    }
+    if (mode == 2) sent = "MD6;";  
+    else sent = "MD3;"; 
   }
   else  if (command == "ID")  {  
     sent = "ID019;";
