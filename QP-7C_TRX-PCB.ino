@@ -8,7 +8,7 @@
 //#define IuseMakerNanoBuzzer
 // =================================================
 // Decentralize Beats to white-like noise in CW mode
-#define IuseBeatDecentralization
+//#define IuseBeatDecentralization
 // =================================================
 
 //#define FREQ_CW   3560000 // in Hz
@@ -74,7 +74,7 @@ void setup(void)
   si5351.set_freq(freq*100ULL, SI5351_CLK0);  //for TX
   si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);
   si5351.output_enable(SI5351_CLK0, 0);
-  si5351.set_freq(freq*100ULL/2, SI5351_CLK1);  //for RX
+  si5351.set_freq(freq*100ULL, SI5351_CLK1);  //for RX
   si5351.drive_strength(SI5351_CLK1, SI5351_DRIVE_8MA);
   si5351.output_enable(SI5351_CLK1, 0);
   
@@ -101,47 +101,35 @@ void setup(void)
   delay(100);
   if (digitalRead(11)==0){
       mode = 2; //Digital(FSK) mode
-      cw_tone=0;
-      freq=FREQ_DIGI;  
-      //Timer setting for audio frequency analysis----- 
-      TCCR1A = 0x00;
-      TCCR1B = 0x01; // Timer1 Timer 16 MHz
-      TCCR1B = 0x81; // Timer1 Input Capture Noise Canceler
-      ACSR |= (1<<ACIC);  // Analog Comparator Capture Input
+      freq=FREQ_DIGI;        
+      digital_prep();
   }
   else {
     key1=digitalRead(2);
     key2=digitalRead(5)*2; 
+
     switch (key1+key2){
     case 1:
       mode = 0; //Single key mode (CW)
       freq=FREQ_CW;
-      if (freq < 10000000) cw_tone = -CW_TONE;
-      else cw_tone = CW_TONE;
+      cw_prep();
       break;
     case 2:
       mode = 0; //Single key mode (CW)
       freq=FREQ_CW;
-      if (freq < 10000000) cw_tone = -CW_TONE;
-      else cw_tone = CW_TONE;
+      cw_prep();
       break;
     case 3:
       mode = 1; //Paddle mode (CW)
       freq=FREQ_CW;
-      if (freq < 10000000) cw_tone = -CW_TONE;
-      else cw_tone = CW_TONE;
+      cw_prep();
       pinMode(4, OUTPUT);
       digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
       break;
     default:
       mode = 2; //Digital(FSK) mode
-      cw_tone=0;
-      freq=FREQ_DIGI;  
-      //Timer setting for audio frequency analysis----- 
-      TCCR1A = 0x00;
-      TCCR1B = 0x01; // Timer1 Timer 16 MHz
-      TCCR1B = 0x81; // Timer1 Input Capture Noise Canceler
-      ACSR |= (1<<ACIC);  // Analog Comparator Capture Input 
+      freq=FREQ_DIGI;        
+      digital_prep();
     }
   }
   
@@ -155,6 +143,24 @@ void setup(void)
   si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
   digitalWrite(12,1);  //RX on
   digitalWrite(13,0);  //TX off
+}
+
+void cw_prep(void){
+  if (freq < 10000000) {
+    cw_tone = -CW_TONE;
+  }
+  else {
+    cw_tone = CW_TONE;
+  }
+}
+
+void digital_prep(void){
+  cw_tone=0;
+  //Timer setting for audio frequency analysis----- 
+  TCCR1A = 0x00;
+  TCCR1B = 0x01; // Timer1 Timer 16 MHz
+  TCCR1B = 0x81; // Timer1 Input Capture Noise Canceler
+  ACSR |= (1<<ACIC);  // Analog Comparator Capture Input
 }
 
 void loop(void)
@@ -637,6 +643,26 @@ void cat(void) {
     sent = "FA" // Return 11 digit frequency in Hz.  
     + String("00000000000").substring(0,11-(String(freq).length()))   
     + String(freq) + ";";     
+  }
+  else if (command == "IF") {          
+    if (mode == 2) {
+      sent = "IF" // Return 11 digit frequency in Hz.  
+      + String("00000000000").substring(0,11-(String(freq).length()))   
+      + String(freq) + "0001-00000" + "0000006" + "0000000;";     
+    }
+    else {
+      sent = "IF" // Return 11 digit frequency in Hz.  
+      + String("00000000000").substring(0,11-(String(freq).length()))   
+      + String(freq) + "0001-00000" + "0000003" + "0000000;";     
+    }
+  }
+  else if (command == "MD") {          
+    if (parameter = "6") {
+      mode = 2;
+      digital_prep();
+    }
+    if (mode == 2) sent = "MD6;";  
+    else sent = "MD3;"; 
   }
   else  if (command == "ID")  {  
     sent = "ID019;";
