@@ -62,7 +62,7 @@
 Si5351 si5351;
 
 int local = 1 ; // 1: reciving freq = local osc. freq + IF , -1: reciving freq = local osc.freq - IF 
-long int freq=FREQ_DIGI;   //initial frequency (Hz)
+long long int freq=FREQ_DIGI;   //initial frequency (Hz)
 long int freqstep = 1000;  //initial frequency step (Hz)
 long int bfofreq=BFO_USB;  //initial BFO frequency step (Hz)
 int cursol = 5;            // =8-log(freqstep)
@@ -77,7 +77,7 @@ int oled_changed; //1 = oled is changed (for s meter display)
 void setup(void)
 {
   Serial.begin(115200); 
-  Serial.setTimeout(4);
+  Serial.setTimeout(10);
   //si5351 initialization-----  
   int32_t cal_factor = Si5351_CAL;
   //int32_t cal_factor = 0;
@@ -259,7 +259,7 @@ void cw1(void) //Paddle mode (CW)
 }
 
 void cw_tx(void){
-  if (TxStatus==0 && freqcheck(freq)==0) {
+  if (TxStatus==0 && freqcheck((long int)freq)==0) {
     //si5351.output_enable(SI5351_CLK1, 0);   //RX Mix osc. off
     //si5351.output_enable(SI5351_CLK2, 0);   //RX BFO osc. off
     si5351.output_enable(SI5351_CLK0, 1);   //TX osc. on
@@ -396,8 +396,10 @@ void digital(void)
         si5351.output_enable(SI5351_CLK1, 0);   //RX Mix osc. off
         si5351.output_enable(SI5351_CLK2, 0);   //RX BFO osc. off
         si5351.output_enable(SI5351_CLK0, 1);   //TX osc. on
+        TxStatus=1;
       }
       si5351.set_freq((freq*100ULL + codefreq), SI5351_CLK0);  
+      Serial.println(codefreq/100);
       FSKtx = 1;
     }
     else{
@@ -413,6 +415,7 @@ void digital(void)
     si5351.output_enable(SI5351_CLK1, 1);   //RX Mix osc. on
     si5351.output_enable(SI5351_CLK2, 1);   //RX BFO osc. on
     FSKtx = 0;
+    TxStatus=0;
   }
 
   // change the frequency by rotary encoder
@@ -544,7 +547,7 @@ void si5351_freqset(void){
 
 //OLED frequency display (128x64)
 void oled_disp() {
-  String freqString =  String(freq, DEC);
+  String freqString =  String((long int)freq, DEC);
   String modeString;
   int cursolposition;
   switch(mode){
@@ -699,19 +702,24 @@ void cat(void) {
       //VfoRx = VfoTx;   
     }          
     sent = "FA" // Return 11 digit frequency in Hz.  
-    + String("00000000000").substring(0,11-(String(freq).length()))   
-    + String(freq) + ";";     
+    + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+    + String((long int)freq) + ";";     
+  }
+  else if (command == "FB") {                   
+    sent = "FB" // Return 11 digit frequency in Hz.  
+    + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+    + String((long int)freq) + ";";     
   }
   else if (command == "IF") {          
     if (mode == 2) {
       sent = "IF" // Return 11 digit frequency in Hz.  
-      + String("00000000000").substring(0,11-(String(freq).length()))   
-      + String(freq) + "0001-00000" + "0000006" + "0000000;";     
+      + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "60000000;";     
     }
     else {
       sent = "IF" // Return 11 digit frequency in Hz.  
-      + String("00000000000").substring(0,11-(String(freq).length()))   
-      + String(freq) + "0001-00000" + "0000003" + "0000000;";     
+      + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "30000000;";     
     }
   }
   else if (command == "MD") {          
@@ -724,6 +732,36 @@ void cat(void) {
   }
   else  if (command == "ID")  {  
     sent = "ID019;";
+  }
+  else  if (command == "PS")  {  
+    sent = "PS1;";
+  }
+  else  if (command == "AI")  {  
+    sent = "AI0;";
+  }
+  else  if (command == "RX")  {  
+    sent = "RX0;";
+  }
+  else  if (command == "TX")  {  
+    sent = "TX0;";
+  }
+  else  if (command == "AG")  {  
+    sent = "AG0000;";
+  }
+  else  if (command == "XT")  {  
+    sent = "XT0;";
+  }
+  else  if (command == "RT")  {  
+    sent = "RT0;";
+  }
+  else  if (command == "RC")  {  
+    sent = ";";
+  }
+  else  if (command == "RS")  {  
+    sent = "RS0;";
+  }
+  else  if (command == "VX")  {  
+    sent = "VX0;";
   }
   else  {
     sent = String("?;"); //added

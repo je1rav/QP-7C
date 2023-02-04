@@ -52,7 +52,7 @@
 
 Si5351 si5351;
 
-long int freq;   // frequency (Hz)
+long long int freq;   // frequency (Hz)
 long int freqstep = 1000;  //initial frequency step (Hz)
 int cursol = 5;            // =8-log(freqstep)
 int mode; //0=CW mode (single key), 1=CW mode (puddle), 2=Digital mode
@@ -497,7 +497,7 @@ void digitalfreqchange(void)
 
 //OLED frequency display (128x64)
 void oled_disp() {
-  String freqString =  String(freq, DEC);
+  String freqString =  String((long int)freq, DEC);
   String modeString;
   int cursolposition;
   switch(mode){
@@ -641,19 +641,24 @@ void cat(void) {
       //VfoRx = VfoTx;   
     }          
     sent = "FA" // Return 11 digit frequency in Hz.  
-    + String("00000000000").substring(0,11-(String(freq).length()))   
-    + String(freq) + ";";     
+    + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+    + String((long int)freq) + ";";     
+  }
+  else if (command == "FB") {                   
+    sent = "FB" // Return 11 digit frequency in Hz.  
+    + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+    + String((long int)freq) + ";";     
   }
   else if (command == "IF") {          
     if (mode == 2) {
       sent = "IF" // Return 11 digit frequency in Hz.  
-      + String("00000000000").substring(0,11-(String(freq).length()))   
-      + String(freq) + "0001-00000" + "0000006" + "0000000;";     
+      + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "60000000;";     
     }
     else {
       sent = "IF" // Return 11 digit frequency in Hz.  
-      + String("00000000000").substring(0,11-(String(freq).length()))   
-      + String(freq) + "0001-00000" + "0000003" + "0000000;";     
+      + String("00000000000").substring(0,11-(String((long int)freq).length()))   
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "30000000;";     
     }
   }
   else if (command == "MD") {          
@@ -666,6 +671,36 @@ void cat(void) {
   }
   else  if (command == "ID")  {  
     sent = "ID019;";
+  }
+  else  if (command == "PS")  {  
+    sent = "PS1;";
+  }
+  else  if (command == "AI")  {  
+    sent = "AI0;";
+  }
+  else  if (command == "RX")  {  
+    sent = "RX0;";
+  }
+  else  if (command == "TX")  {  
+    sent = "TX0;";
+  }
+  else  if (command == "AG")  {  
+    sent = "AG0000;";
+  }
+  else  if (command == "XT")  {  
+    sent = "XT0;";
+  }
+  else  if (command == "RT")  {  
+    sent = "RT0;";
+  }
+  else  if (command == "RC")  {  
+    sent = ";";
+  }
+  else  if (command == "RS")  {  
+    sent = "RS0;";
+  }
+  else  if (command == "VX")  {  
+    sent = "VX0;";
   }
   else  {
     sent = String("?;"); //added
