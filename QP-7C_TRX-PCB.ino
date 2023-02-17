@@ -4,10 +4,13 @@
 // ==================CatControll====================
 #define IuseCatControll
 // =================================================
+// ====EEPROM for storing cw_rate and frequencies===
+#define IuseEEPROM
+// =================================================
 // =====MakerNanoBuzzer for CW tone (D8 pin)========
 //#define IuseMakerNanoBuzzer
 // =================================================
-// Decentralize Beats to white-like noise in CW mode
+// Decentralize beats to white-like noise in CW mode
 //#define IuseBeatDecentralization
 // =================================================
 
@@ -38,6 +41,7 @@
 
 #include <si5351.h>
 #include <Wire.h>
+#include <EEPROM.h>
 
 #ifdef IhaveOLED&RotaryEncorder
   //OLED
@@ -52,6 +56,8 @@
 
 Si5351 si5351;
 
+long long int freq_digi = FREQ_DIGI;   //initial frequency (Hz)
+long long int freq_cw = FREQ_CW;   //initial frequency (Hz)
 long long int freq;   // frequency (Hz)
 long int freqstep = 1000;  //initial frequency step (Hz)
 int cursol = 5;            // =8-log(freqstep)
@@ -62,10 +68,39 @@ int TxStatus = 0; //0=RX, 1=TX
 int key1;
 int key2;
 
+#ifdef IuseEEPROM
+typedef struct {
+    int cw;
+    long long int cw_freq;
+    long long int digi_freq;
+  } st;
+st rom;
+#endif
+
 void setup(void)
 {
   Serial.begin(115200); 
   Serial.setTimeout(4);
+    
+#ifdef IuseEEPROM
+  if (EEPROM.read(0x00) != 0xFF){
+    EEPROM.get(0x00,rom);
+    cw_rate = rom.cw;
+    freq_cw = rom.cw_freq;
+    freq_digi = rom.digi_freq;
+  }
+  else {
+    rom.cw = cw_rate;
+    rom.cw_freq = freq_cw;
+    rom.digi_freq = freq_digi;
+    EEPROM.put(0x00,rom);
+  }
+#else
+  for (unsigned int i=0;i<34;i++) {
+    EEPROM.update(i,0xFF);
+  }
+#endif
+
   //si5351 initialization-----  
   int32_t cal_factor = -11800;
   si5351.init(SI5351_CRYSTAL_LOAD_8PF, 0, 0); 
@@ -101,7 +136,6 @@ void setup(void)
   delay(100);
   if (digitalRead(11)==0){
       mode = 2; //Digital(FSK) mode
-      freq=FREQ_DIGI;        
       digital_prep();
   }
   else {
@@ -111,24 +145,20 @@ void setup(void)
     switch (key1+key2){
     case 1:
       mode = 0; //Single key mode (CW)
-      freq=FREQ_CW;
       cw_prep();
       break;
     case 2:
       mode = 0; //Single key mode (CW)
-      freq=FREQ_CW;
       cw_prep();
       break;
     case 3:
       mode = 1; //Paddle mode (CW)
-      freq=FREQ_CW;
       cw_prep();
       pinMode(4, OUTPUT);
       digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
       break;
     default:
       mode = 2; //Digital(FSK) mode
-      freq=FREQ_DIGI;        
       digital_prep();
     }
   }
@@ -137,8 +167,8 @@ void setup(void)
   oled_disp();
   #endif   
  
-  si5351.set_freq(freq*100ULL, SI5351_CLK0);   //TX freequency 
-  si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1);   //RX freequency
+  si5351.set_freq(freq*100ULL, SI5351_CLK0);   //TX frequency 
+  si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1);   //RX frequency
   si5351.output_enable(SI5351_CLK0, 0);   //TX osc. off
   si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
   digitalWrite(12,1);  //RX on
@@ -146,6 +176,8 @@ void setup(void)
 }
 
 void cw_prep(void){
+  freq=freq_cw;
+  pinMode(4, INPUT);
   if (freq < 10000000) {
     cw_tone = -CW_TONE;
   }
@@ -155,6 +187,8 @@ void cw_prep(void){
 }
 
 void digital_prep(void){
+  freq=freq_digi;       
+  pinMode(4, INPUT);
   cw_tone=0;
   //Timer setting for audio frequency analysis----- 
   TCCR1A = 0x00;
@@ -240,9 +274,16 @@ void cw_tx(void){
     si5351.output_enable(SI5351_CLK0, 1);   //TX osc. on
     digitalWrite(12,0);   //RX off
     digitalWrite(13,1);   //TX on
-    #ifdef IuseMakerNanoBuzzer
-      tone(8, cw_tone);   //Maker Nano buzzer on
-    #endif
+  #ifdef IuseMakerNanoBuzzer
+    tone(8, cw_tone);   //Maker Nano buzzer on
+  #endif
+  #ifdef IuseEEPROM
+    EEPROM.get(0x00,rom);
+    if (rom.cw_freq != freq) {
+      rom.cw_freq = freq;
+      EEPROM.put(0x00,rom);
+    }
+  #endif    
     TxStatus=1;
   }  
 }
@@ -265,7 +306,7 @@ void digital(void)
   //https://www.elektronik-labor.de/HF/FT8QRP.html
   //partly modified
   //(Using 3 cycles for timer sampling to improve the precision of frequency measurements)
-  //(Against overflow in low frequency measurements)
+  //(Overflow countermeasures for low-frequency measurements)
   // change the frequency by rotary encoder
   #ifdef IhaveOLED&RotaryEncorder
     digitalfreqchange();
@@ -368,8 +409,19 @@ void digital(void)
         delay(10);
         si5351.output_enable(SI5351_CLK1, 0);   //RX osc. off
         si5351.output_enable(SI5351_CLK0, 1);   //TX osc. on
+        TxStatus=1;
+      #ifdef IuseEEPROM
+        EEPROM.get(0x00,rom);
+        if (rom.digi_freq != freq) {
+          rom.digi_freq = freq;
+          EEPROM.put(0x00,rom);
+        }
+      #endif
       }
       si5351.set_freq((freq*100ULL + codefreq), SI5351_CLK0);  
+    #ifdef IuseCatControll
+      if(Serial.available() > 0) cat();
+    #endif
       FSKtx = 1;
     }
     else{
@@ -385,6 +437,7 @@ void digital(void)
     digitalWrite(12,1);  //RX on
     si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
     FSKtx = 0;
+    TxStatus=0;
   }
   
   // change the frequency by rotary encoder
@@ -413,10 +466,18 @@ void cwfreqchange(void)
         r_result=r.process();
         if (r_result==DIR_CW){
           cw_rate++;
+        #ifdef IuseEEPROM
+          rom.cw = cw_rate;
+          EEPROM.put(0x00,rom);
+        #endif       
           oled_disp_cw_rate();    
         }
         else if (r_result==DIR_CCW){
           cw_rate--;
+        #ifdef IuseEEPROM
+          rom.cw = cw_rate;
+          EEPROM.put(0x00,rom);
+        #endif       
           oled_disp_cw_rate();    
         }
       }
@@ -664,7 +725,33 @@ void cat(void) {
   else if (command == "MD") {          
     if (parameter = "6") {
       mode = 2;
+      freq_digi=freq;
       digital_prep();
+    }
+    else if  (parameter = "3") {
+      freq_cw=freq;
+      key1=digitalRead(2);
+      key2=digitalRead(5)*2; 
+      switch (key1+key2){
+      case 1:
+        mode = 0; //Single key mode (CW)
+        cw_prep();
+        break;
+      case 2:
+        mode = 0; //Single key mode (CW)
+        cw_prep();
+        break;
+      case 3:
+        mode = 1; //Paddle mode (CW)
+        cw_prep();
+        pinMode(4, OUTPUT);
+        digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
+        break;
+      default:
+        mode = 2;
+        digital_prep();
+        break;
+      }
     }
     if (mode == 2) sent = "MD6;";  
     else sent = "MD3;"; 
