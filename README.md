@@ -285,11 +285,11 @@ QP-7Cミニ送信機キット(CRkits共同購入プロジェクト)とSimple Min
 	DL2MANの(tr)uSDXと同様な改造を行ってcharge pumpを使用しないようにすると，表示は少し暗くなりますが，ノイズが減りました.  
 	https://www.youtube.com/watch?v=jnxaILwqUnw
 
-QP-7Cミニ送信機キットの部品をつけた状態．
-
+QP-7Cミニ送信機キットの部品をつけた状態  
 ![alt text](images/QP-7C_TRX_2.png)  
 ![alt text](images/QP-7C_TRX_2.1.png)  
 ![alt text](images/QP-7C_TRX_2.2.png)  
+BFP基板とLPF基板へ部品を取り付ける面の向きに注意してください.  
 
 
 QP-7Cミニ受信機キットの部品もつけた状態．
@@ -297,10 +297,10 @@ QP-7Cミニ受信機キットの部品もつけた状態．
 ![alt text](images/QP-7C_TRX_3.png)
 
 
-その他の部品もつけた状態
-
-![alt text](images/QP-7C_TRX_4.png)
-![alt text](images/QP-7C_TRX_5.png)
+その他の部品もつけた状態  
+![alt text](images/QP-7C_TRX_4.png)  
+![alt text](images/QP-7C_TRX_5.png)  
+BFP基板とLPF基板をメイン基板に接続する際の向きに注意してください.  
 
 
 #### Arduino Nano用スケッチは"QP-7C_TRX-PCB.ino"です．  
@@ -503,6 +503,8 @@ QRP LabsのQCXやuSDX(QCX-SSB)は，スイッチング方式のIQミキサーを
 	メイン基板上のセラミックフィルターを使用するには，J5の1-2ピン間および4-5ピン間をつなぐショートピンを準備する必要があります．　　  
 
 部品をつけた状態　　  
+BFP基板とLPF基板への部品を取り付ける面の方向に注意してください.  
+また，これらの基板のメイン基板への接続の向きにも注意してください.  
 ![alt text](images/QP-7C_TRX2_2.png)　  
 ![alt text](images/QP-7C_TRX2_3.png)　  
 
