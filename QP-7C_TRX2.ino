@@ -10,7 +10,7 @@
 // =====MakerNanoBuzzer for CW tone (D8 pin)========
 //#define IuseMakerNanoBuzzer
 // =================================================
-// =Decentralize beats to white-like noise(CW mode)=
+// =Decentralize Beats to white-like noise(CW mode)=
 //#define IuseBeatDecentralization
 // =================================================
 
@@ -65,10 +65,10 @@
 
 Si5351 si5351;
 
-int local = 1 ; // 1: receiving freq = local osc. freq + IF , -1: receiving freq = local osc.freq - IF 
+int local = 1 ; // 1: reciving freq = local osc. freq + IF , -1: reciving freq = local osc.freq - IF 
 long long int freq_digi = FREQ_DIGI;   //initial frequency (Hz)
 long long int freq_cw = FREQ_CW;   //initial frequency (Hz)
-long long int freq;   //initial frequency (Hz)
+long long int freq = freq_digi;   //initial frequency (Hz)
 long int freqstep = 1000;  //initial frequency step (Hz)
 long int bfofreq=BFO_USB;  //initial BFO frequency step (Hz)
 int cursol = 5;            // =8-log(freqstep)
@@ -112,7 +112,7 @@ void setup(void)
     EEPROM.update(i,0xFF);
   }
 #endif
-  
+
   //si5351 initialization-----  
   int32_t cal_factor = Si5351_CAL;
   //int32_t cal_factor = 0;
@@ -152,6 +152,7 @@ void setup(void)
   delay(100);
   if (digitalRead(11)==0){
       mode = 2; //Digital(FSK) mode
+      freq=freq_digi;        
       digital_prep();
   }
   else {
@@ -161,20 +162,24 @@ void setup(void)
     switch (key1+key2){
     case 1:
       mode = 0; //Single key mode (CW)
+      freq=freq_cw;
       cw_prep();
       break;
     case 2:
       mode = 0; //Single key mode (CW)
+      freq=freq_cw;
       cw_prep();
       break;
     case 3:
       mode = 1; //Paddle mode (CW)
+      freq=freq_cw;
       cw_prep();
       pinMode(4, OUTPUT);
       digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
       break;
     default:
       mode = 2; //Digital(FSK) mode
+      freq=freq_digi;        
       digital_prep();
     }
   }
@@ -192,25 +197,23 @@ void setup(void)
 }
 
 void cw_prep(void){
-  freq=freq_cw;
   pinMode(4, INPUT);
   if (freq < 10000000) {
     cw_tone = -CW_TONE;
-    if (local = 1) bfofreq = BFO_LSB;
+    if (local == 1) bfofreq = BFO_LSB;
     else bfofreq = BFO_USB;
   }
   else {
     cw_tone = CW_TONE;
-    if (local = 1) bfofreq = BFO_USB;
+    if (local == 1) bfofreq = BFO_USB;
     else bfofreq = BFO_LSB;
   }
 }
 
 void digital_prep(void){
-  freq=freq_digi;       
   pinMode(4, INPUT);
   cw_tone=0;
-  if (local = 1) bfofreq = BFO_USB;
+  if (local == 1) bfofreq = BFO_USB;
   else bfofreq = BFO_LSB;
   //Timer setting for audio frequency analysis----- 
   TCCR1A = 0x00;
@@ -308,7 +311,7 @@ void cw_tx(void){
       rom.cw_freq = freq;
       EEPROM.put(0x00,rom);
     }
-  #endif    
+  #endif  
     TxStatus=1;
   }  
 }
@@ -332,7 +335,7 @@ void digital(void)
   //https://www.elektronik-labor.de/HF/FT8QRP.html
   //partly modified
   //(Using 3 cycles for timer sampling to improve the precision of frequency measurements)
-  //(Overflow countermeasures for low-frequency measurements)
+  //(Against overflow in low frequency measurements)
   // change the frequency by rotary encoder
   #ifdef IhaveOLED&RotaryEncorder
     digitalfreqchange();
@@ -444,13 +447,13 @@ void digital(void)
           rom.digi_freq = freq;
           EEPROM.put(0x00,rom);
         }
-      #endif    
+      #endif  
       }
       si5351.set_freq((freq*100ULL + codefreq), SI5351_CLK0);  
+      FSKtx = 1;
     #ifdef IuseCatControll
       if(Serial.available() > 0) cat();
     #endif
-      FSKtx = 1;
     }
     else{
       FSK--;
@@ -500,7 +503,7 @@ void cwfreqchange(void)
         #ifdef IuseEEPROM
           rom.cw = cw_rate;
           EEPROM.put(0x00,rom);
-        #endif        
+        #endif     
           oled_disp_cw_rate();    
         }
         else if (r_result==DIR_CCW){
@@ -508,7 +511,7 @@ void cwfreqchange(void)
         #ifdef IuseEEPROM
           rom.cw = cw_rate;
           EEPROM.put(0x00,rom);
-        #endif        
+        #endif     
           oled_disp_cw_rate();    
         }
       }
@@ -523,7 +526,7 @@ void cwfreqchange(void)
     }
     oled_disp();
   } 
-  // read rotary encoder status
+  // read rotary encoder state
   r_result=r.process();
   // increase the frequency by rotary encoder
   if (r_result==DIR_CW){
@@ -531,12 +534,12 @@ void cwfreqchange(void)
     if (freqset <= 54000000) freq = freqset;
     if (freq < 10000000) {
       cw_tone = -CW_TONE;
-      if (local = 1) bfofreq = BFO_LSB;
+      if (local == 1) bfofreq = BFO_LSB;
       else bfofreq = BFO_USB;
     }
     else {
       cw_tone = CW_TONE;
-      if (local = 1) bfofreq = BFO_USB;
+      if (local == 1) bfofreq = BFO_USB;
       else bfofreq = BFO_LSB;
     }
     si5351_freqset();
@@ -548,12 +551,12 @@ void cwfreqchange(void)
     if (freqset >= 1000000) freq = freqset;
     if (freq < 10000000) {
       cw_tone = -CW_TONE;
-      if (local = 1) bfofreq = BFO_LSB;
+      if (local == 1) bfofreq = BFO_LSB;
       else bfofreq = BFO_USB;    
     }
     else {
       cw_tone = CW_TONE;
-      if (local = 1) bfofreq = BFO_USB;
+      if (local == 1) bfofreq = BFO_USB;
       else bfofreq = BFO_LSB;
     }
     si5351_freqset();
@@ -744,12 +747,12 @@ void cat(void) {
       if (mode == 2) cw_tone = 0;
       else if (freq < 10000000) { 
         cw_tone = -CW_TONE;
-      if (local = 1) bfofreq = BFO_LSB;
+      if (local == 1) bfofreq = BFO_LSB;
       else bfofreq = BFO_USB;    
       }
       else {
         cw_tone = CW_TONE;
-        if (local = 1) bfofreq = BFO_USB;
+        if (local == 1) bfofreq = BFO_USB;
         else bfofreq = BFO_LSB;    
       }
       si5351_freqset();
@@ -772,46 +775,56 @@ void cat(void) {
     if (mode == 2) {
       sent = "IF" // Return 11 digit frequency in Hz.  
       + String("00000000000").substring(0,11-(String((long int)freq).length()))   
-      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "60000000;";     
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "60000000;";     //USB  
     }
     else {
       sent = "IF" // Return 11 digit frequency in Hz.  
       + String("00000000000").substring(0,11-(String((long int)freq).length()))   
-      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "30000000;";     
+      + String((long int)freq) + "0001+00000" + "00000" + String(TxStatus).substring(0,1) + "30000000;";      
     }
   }
   else if (command == "MD") {          
-    if (parameter = "6") {
+    if (parameter == "2") {                 //USB
       mode = 2;
-      freq_digi=freq;
       digital_prep();
+      si5351_freqset();
+    #ifdef IhaveOLED&RotaryEncorder
+      oled_disp();
+    #endif
     }
-    else if  (parameter = "3") {
-      freq_cw=freq;
+    else if  (parameter == "3") {
       key1=digitalRead(2);
       key2=digitalRead(5)*2; 
       switch (key1+key2){
       case 1:
         mode = 0; //Single key mode (CW)
         cw_prep();
-        break;
+        si5351_freqset();
+    #ifdef IhaveOLED&RotaryEncorder
+      oled_disp();
+    #endif
+      break;
       case 2:
         mode = 0; //Single key mode (CW)
         cw_prep();
-        break;
-      case 3:
+        si5351_freqset();
+    #ifdef IhaveOLED&RotaryEncorder
+      oled_disp();
+    #endif
+      break;
+      default:
         mode = 1; //Paddle mode (CW)
         cw_prep();
         pinMode(4, OUTPUT);
         digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
-        break;
-      default:
-        mode = 2;
-        digital_prep();
-        break;
+        si5351_freqset();
+    #ifdef IhaveOLED&RotaryEncorder
+      oled_disp();
+    #endif
+      break;
       }
     }
-    if (mode == 2) sent = "MD6;";  
+    if (mode == 2) sent = "MD2;";  
     else sent = "MD3;"; 
   }
   else  if (command == "ID")  {  
