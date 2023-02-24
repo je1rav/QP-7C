@@ -10,7 +10,7 @@
 // =====MakerNanoBuzzer for CW tone (D8 pin)========
 //#define IuseMakerNanoBuzzer
 // =================================================
-// =Decentralize Beats to white-like noise(CW mode)=
+// =Decentralize beats to white-like noise(CW mode)=
 //#define IuseBeatDecentralization
 // =================================================
 
@@ -65,7 +65,7 @@
 
 Si5351 si5351;
 
-int local = 1 ; // 1: reciving freq = local osc. freq + IF , -1: reciving freq = local osc.freq - IF 
+int local = 1 ; // 1: receiving freq = local osc. freq + IF , -1: receiving freq = local osc.freq - IF 
 long long int freq_digi = FREQ_DIGI;   //initial frequency (Hz)
 long long int freq_cw = FREQ_CW;   //initial frequency (Hz)
 long long int freq = freq_digi;   //initial frequency (Hz)
@@ -335,7 +335,7 @@ void digital(void)
   //https://www.elektronik-labor.de/HF/FT8QRP.html
   //partly modified
   //(Using 3 cycles for timer sampling to improve the precision of frequency measurements)
-  //(Against overflow in low frequency measurements)
+  //(Overflow countermeasures for in low-frequency measurements)
   // change the frequency by rotary encoder
   #ifdef IhaveOLED&RotaryEncorder
     digitalfreqchange();
@@ -526,7 +526,7 @@ void cwfreqchange(void)
     }
     oled_disp();
   } 
-  // read rotary encoder state
+  // read rotary encoder status
   r_result=r.process();
   // increase the frequency by rotary encoder
   if (r_result==DIR_CW){
@@ -876,8 +876,8 @@ void cat(void) {
 
 void si5351_freqset(void){
   si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
-  si5351.set_freq((freq-bfofreq*local)*100ULL, SI5351_CLK1); //RX Mix  
-  si5351.set_freq((bfofreq-cw_tone*local)*100ULL, SI5351_CLK2);   //RX BFO freequency
+  si5351.set_freq((freq-bfofreq*local)*100ULL, SI5351_CLK1); //RX Mix
+  si5351.set_freq((bfofreq-cw_tone*local)*100ULL, SI5351_CLK2);   //RX BFO
 }
 
 //checking for the prevention of out-of-band transmission (in JA)
