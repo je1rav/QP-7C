@@ -600,12 +600,6 @@ void digitalfreqchange(void)
   }
 }
 
-void si5351_freqset(void){
-  si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
-  si5351.set_freq((freq-bfofreq*local)*100ULL, SI5351_CLK1); //RX Mix  
-  si5351.set_freq((bfofreq-cw_tone*local)*100ULL, SI5351_CLK2);   //RX BFO freequency
-}
-
 //OLED frequency display (128x64)
 void oled_disp() {
   String freqString =  String((long int)freq, DEC);
@@ -879,6 +873,12 @@ void cat(void) {
   }  
 }
 #endif
+
+void si5351_freqset(void){
+  si5351.set_freq(freq*100ULL, SI5351_CLK0); //TX
+  si5351.set_freq((freq-bfofreq*local)*100ULL, SI5351_CLK1); //RX Mix  
+  si5351.set_freq((bfofreq-cw_tone*local)*100ULL, SI5351_CLK2);   //RX BFO freequency
+}
 
 //checking for the prevention of out-of-band transmission (in JA)
 int freqcheck(long int frequency)  // retern 1=out-of-band, 0=in-band
