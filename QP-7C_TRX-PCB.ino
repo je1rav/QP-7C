@@ -10,7 +10,7 @@
 // =====MakerNanoBuzzer for CW tone (D8 pin)========
 //#define IuseMakerNanoBuzzer
 // =================================================
-// Decentralize Beats to white-like noise in CW mode
+// Decentralize beats to white-like noise in CW mode
 //#define IuseBeatDecentralization
 // =================================================
 
@@ -172,8 +172,8 @@ void setup(void)
   oled_disp();
   #endif   
  
-  si5351.set_freq(freq*100ULL, SI5351_CLK0);   //TX freequency 
-  si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1);   //RX freequency
+  si5351.set_freq(freq*100ULL, SI5351_CLK0);   //TX frequency 
+  si5351.set_freq((freq-cw_tone)*100ULL, SI5351_CLK1);   //RX frequency
   si5351.output_enable(SI5351_CLK0, 0);   //TX osc. off
   si5351.output_enable(SI5351_CLK1, 1);   //RX osc. on
   digitalWrite(12,1);  //RX on
@@ -309,7 +309,7 @@ void digital(void)
   //https://www.elektronik-labor.de/HF/FT8QRP.html
   //partly modified
   //(Using 3 cycles for timer sampling to improve the precision of frequency measurements)
-  //(Against overflow in low frequency measurements)
+  //(Overflow countermeasures for in low-frequency measurements)
   // change the frequency by rotary encoder
   #ifdef IhaveOLED&RotaryEncorder
     digitalfreqchange();
@@ -494,7 +494,7 @@ void cwfreqchange(void)
     }
     oled_disp();
   }
-  // read rotary encoder state
+  // read rotary encoder status
   r_result=r.process();
   // increase the frequency by rotary encoder
   if (r_result==DIR_CW){
