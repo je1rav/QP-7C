@@ -1,5 +1,5 @@
 // ==============Display&RotaryEncorder=============
-#define IhaveOLED&RotaryEncorder
+#define IhaveOLED
 // =================================================
 // ==================CatControll====================
 #define IuseCatControll
@@ -52,7 +52,7 @@
 #include <Wire.h>
 #include <EEPROM.h>
 
-#ifdef IhaveOLED&RotaryEncorder
+#ifdef IhaveOLED
   //OLED
   #include "SSD1306Ascii.h"
   #include "SSD1306AsciiAvrI2c.h"
@@ -74,7 +74,7 @@ long int bfofreq=BFO_USB;  //initial BFO frequency step (Hz)
 int cursol = 5;            // =8-log(freqstep)
 int mode; //0=CW mode (single key), 1=CW mode (puddle), 2=Digital mode
 int cw_tone;
-int cw_rate= 20; //WPM
+int cw_rate = 20; //WPM
 int TxStatus = 0; //0=RX, 1=TX
 int key1;
 int key2;
@@ -97,9 +97,30 @@ void setup(void)
 #ifdef IuseEEPROM
   if (EEPROM.read(0x00) != 0xFF){
     EEPROM.get(0x00,rom);
-    cw_rate = rom.cw;
-    freq_cw = rom.cw_freq;
-    freq_digi = rom.digi_freq;
+    if ((rom.cw > 1) && (rom.cw < 100)) {
+      cw_rate = rom.cw;
+    }
+    else {
+      cw_rate = 20;
+      rom.cw = cw_rate;
+      EEPROM.put(0x00,rom);
+    }
+    if ((rom.cw_freq > 1000000) && (rom.cw_freq < 54000000)) {
+      freq_cw = rom.cw_freq;
+    }
+    else  {
+      freq_cw = FREQ_CW;
+      rom.cw_freq = freq_cw;
+      EEPROM.put(0x00,rom);
+    }
+    if ((rom.digi_freq > 1000000) && (rom.digi_freq < 54000000)) {
+      freq_cw = rom.digi_freq;
+    }
+    else {
+      freq_digi = FREQ_DIGI;
+      rom.digi_freq = freq_digi;
+      EEPROM.put(0x00,rom);
+    }
   }
   else {
     rom.cw = cw_rate;
@@ -128,7 +149,7 @@ void setup(void)
   si5351.set_freq((bfofreq-cw_tone*local)*100ULL, SI5351_CLK2);  //for RX BFO
   si5351.drive_strength(SI5351_CLK1, SI5351_DRIVE_2MA);
   si5351.output_enable(SI5351_CLK1, 0);
-#ifdef IhaveOLED&RotaryEncorder
+#ifdef IhaveOLED
   //OLED initialization----- 
   oled.begin(&Adafruit128x64, I2C_ADDRESS);
   //Rotary encoder initialization-----
@@ -184,7 +205,7 @@ void setup(void)
     }
   }
   
-  #ifdef IhaveOLED&RotaryEncorder
+  #ifdef IhaveOLED
   oled_disp();
   #endif   
  
@@ -241,7 +262,7 @@ void cw0(void) //Single key mode (CW)
     //oled_disp_s(s);
   }
   // change the frequency by rotary encoder
-  #ifdef IhaveOLED&RotaryEncorder
+  #ifdef IhaveOLED
     cwfreqchange();
   #endif  
   // change the frequency by remote control 
@@ -282,7 +303,7 @@ void cw1(void) //Paddle mode (CW)
   }  
   else {   
     // change the frequency by rotary encoder
-    #ifdef IhaveOLED&RotaryEncorder    
+    #ifdef IhaveOLED    
       cwfreqchange();
     #endif  
     // change the frequency by remote control 
@@ -337,7 +358,7 @@ void digital(void)
   //(Using 3 cycles for timer sampling to improve the precision of frequency measurements)
   //(Overflow countermeasures for in low-frequency measurements)
   // change the frequency by rotary encoder
-  #ifdef IhaveOLED&RotaryEncorder
+  #ifdef IhaveOLED
     digitalfreqchange();
   #endif  
   // change the frequency by remote control 
@@ -472,7 +493,7 @@ void digital(void)
   }
 
   // change the frequency by rotary encoder
-  #ifdef IhaveOLED&RotaryEncorder
+  #ifdef IhaveOLED
     digitalfreqchange();
   #endif  
   // change the frequency by remote control 
@@ -482,7 +503,7 @@ void digital(void)
 }
 
 
-#ifdef IhaveOLED&RotaryEncorder
+#ifdef IhaveOLED
 //frequency change by rotary encoder
 void cwfreqchange(void)
 {
@@ -750,7 +771,7 @@ void cat(void) {
         else bfofreq = BFO_LSB;    
       }
       si5351_freqset();
-      #ifdef IhaveOLED&RotaryEncorder
+      #ifdef IhaveOLED
       oled_disp();
       #endif
       // to here            
@@ -782,7 +803,7 @@ void cat(void) {
       mode = 2;
       digital_prep();
       si5351_freqset();
-    #ifdef IhaveOLED&RotaryEncorder
+    #ifdef IhaveOLED
       oled_disp();
     #endif
     }
@@ -794,7 +815,7 @@ void cat(void) {
         mode = 0; //Single key mode (CW)
         cw_prep();
         si5351_freqset();
-    #ifdef IhaveOLED&RotaryEncorder
+    #ifdef IhaveOLED
       oled_disp();
     #endif
       break;
@@ -802,7 +823,7 @@ void cat(void) {
         mode = 0; //Single key mode (CW)
         cw_prep();
         si5351_freqset();
-    #ifdef IhaveOLED&RotaryEncorder
+    #ifdef IhaveOLED
       oled_disp();
     #endif
       break;
@@ -812,7 +833,7 @@ void cat(void) {
         pinMode(4, OUTPUT);
         digitalWrite(4,1); //Pull up 5 pin (dash pin) with 1 kOhm resistor
         si5351_freqset();
-    #ifdef IhaveOLED&RotaryEncorder
+    #ifdef IhaveOLED
       oled_disp();
     #endif
       break;

@@ -85,9 +85,30 @@ void setup(void)
 #ifdef IuseEEPROM
   if (EEPROM.read(0x00) != 0xFF){
     EEPROM.get(0x00,rom);
-    cw_rate = rom.cw;
-    freq_cw = rom.cw_freq;
-    freq_digi = rom.digi_freq;
+    if ((rom.cw > 1) && (rom.cw < 100)) {
+      cw_rate = rom.cw;
+    }
+    else {
+      cw_rate = 20;
+      rom.cw = cw_rate;
+      EEPROM.put(0x00,rom);
+    }
+    if ((rom.cw_freq > 1000000) && (rom.cw_freq < 54000000)) {
+      freq_cw = rom.cw_freq;
+    }
+    else  {
+      freq_cw = FREQ_CW;
+      rom.cw_freq = freq_cw;
+      EEPROM.put(0x00,rom);
+    }
+    if ((rom.digi_freq > 1000000) && (rom.digi_freq < 54000000)) {
+      freq_cw = rom.digi_freq;
+    }
+    else {
+      freq_digi = FREQ_DIGI;
+      rom.digi_freq = freq_digi;
+      EEPROM.put(0x00,rom);
+    }
   }
   else {
     rom.cw = cw_rate;
