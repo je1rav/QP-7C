@@ -482,7 +482,7 @@ void cwfreqchange(void)
   int r_result;
   // change the frequency step by SW
   if (digitalRead(11)==LOW){
-    delay(200);
+    for (int i = 0; (digitalRead(11) == LOW) && (i < 500); i++) delay(1); //Tnx. JG2CEZ
     if (digitalRead(11)==LOW && mode==1){
       oled_disp_cw_rate();    
       while (digitalRead(11)==LOW){  
@@ -545,7 +545,7 @@ void digitalfreqchange(void)
   int r_result;
   // change the frequency step by SW
   if (digitalRead(11)==LOW){
-    delay(200);
+    for (int i = 0; (digitalRead(11) == LOW) && (i < 200); i++) delay(1); //Tnx. JG2CEZ
     if (digitalRead(11)==LOW){
       while (digitalRead(11)==LOW){      
         r_result=r.process();
