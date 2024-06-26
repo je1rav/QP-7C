@@ -425,7 +425,7 @@ void digital(void)
     unsigned long codefreq2 = 1600000000/(65536*Ncycle23+d3-d2);
     unsigned long codefreq3 = 1600000000/(65536*Ncycle34+d4-d3);
     unsigned long codefreq = (codefreq1 + codefreq2 + codefreq3)/3;
-    if (d3==d4) codefreq = 5000;     
+    if ((d3==d4) && (Ncycle34 ==0)) codefreq = 5000;     
     if ((codefreq < 310000) and  (codefreq >= 10000)) {
       if (FSKtx == 0 && freqcheck(freq)==0){
         digitalWrite(12,0);   //RX off
